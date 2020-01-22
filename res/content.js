@@ -1,28 +1,57 @@
-// ==UserScript==
-// @name         GoogleResultsCorrector
-// @namespace    https://github.com/oleksavyshnivsky
-// @version      0.1
-// @description  Виправлення результатів Google-пошуку
-// @author       Oleksa Vyshnivsky
-// @match        https://www.google.com/*
-// @grant        none
-// ==/UserScript==
-
 (function() {
-    'use strict';
-    // Заміна посилань
-    Array.from(document.getElementsByClassName('g')).forEach((el) => {
-        el.innerHTML = el.innerHTML.replace(/\/ru\//gi, '/en/')
-    })
-    // Зміна описів
-    Array.from(document.getElementsByClassName('s')).forEach((el) => {
-        if (
-            el.innerText.includes('ы')
-            || el.innerText.includes('Ы')
-            || el.innerText.includes('э')
-            || el.innerText.includes('Э')
-            || el.innerText.includes('ъ')
-            || el.innerText.includes('Ъ')
-        ) el.innerHTML = el.innerHTML = '<span style="color: red;">[усунено]</span>'
-    })
+	'use strict';
+	// Користувацькі дані
+	let blockedwebsites = ['ubuntu.fliplinux.com', 'www.php.su']
+	function getFromLS() {
+		blockedwebsites = JSON.parse(localStorage.getItem('src-websites-blocked'))
+	}
+	function setInLS() {
+		localStorage.setItem('src-websites-blocked')
+	}
+	// Language detector
+	function isthistextru(text) {
+		return (
+			text.includes('ы')
+			|| text.includes('Ы')
+			|| text.includes('э')
+			|| text.includes('Э')
+			|| text.includes('ъ')
+			|| text.includes('Ъ')
+		)
+	}
+	// Видалення непотрібних результатів
+	function removeBlockedWebsites() {
+		var blockedN = 0
+		Array.from(document.getElementsByClassName('g')).forEach((el) => {
+			var url = el.getElementsByTagName('a')[0].href
+			url = new URL(url)
+			if (blockedwebsites.includes(url.hostname)) {
+				blockedN++
+				var html = el.innerHTML
+				el.setAttribute('data-blockedhtml', html)
+				el.innerHTML = '<span style="color: red;">[Усунено результат з ' + url.hostname + '] '
+			}
+		})
+	}
+
+
+
+	// Заміна посилань
+	Array.from(document.getElementsByClassName('g')).forEach((el) => {
+		el.innerHTML = el.innerHTML.replace(/\/ru\//gi, '/en/')
+	})
+	// Зміна описів
+	Array.from(document.getElementsByClassName('s')).forEach((el) => {
+		if (isthistextru(el.innerText)) el.innerHTML = '<span style="color: red;">[усунено]</span>'
+	})
+
+
+	removeBlockedWebsites()
+
+
+	// Найближчий батьківський елемент
+	function closest (el, predicate) {
+		do if (predicate(el)) return el;
+		while (el = el && el.parentNode);
+	}
 })()

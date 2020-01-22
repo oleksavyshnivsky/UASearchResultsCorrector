@@ -1,10 +1,21 @@
 {
 	"manifest_version": 2,
-	"name": "UA Google Results Corrector",
+	"name": "UA Search Results Corrector",
+	"description": "Виправлення неправильної локалізації результатів пошуку",
 	"version": "0.1",
-	"browser_action": {
-
-	},
+	"permissions": ["declarativeContent", "storage"],
+	"page_action": {
+		"default_popup": "popup.html",
+		"icons": {
+			"16": "icon16.png",
+			"48": "icon48.png",
+			"128": "icon128.png"
+		}
+    },
+	"background": {
+		"scripts": ["background.js"],
+		"persistent": false
+    },
 	"content_scripts": [
 		{
 			"matches": [
