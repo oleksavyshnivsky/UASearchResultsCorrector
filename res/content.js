@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 	// Користувацькі дані
-	let blockedwebsites = ['ubuntu.fliplinux.com', 'www.php.su']
+	let websites2block = ['ubuntu.fliplinux.com', 'www.php.su']
 	function getFromLS() {
-		blockedwebsites = JSON.parse(localStorage.getItem('src-websites-blocked'))
+		websites2block = JSON.parse(localStorage.getItem('src-websites-blocked'))
 	}
 	function setInLS() {
 		localStorage.setItem('src-websites-blocked')
@@ -20,12 +20,12 @@
 		)
 	}
 	// Видалення непотрібних результатів
-	function removeBlockedWebsites() {
+	function removewebsites2block() {
 		var blockedN = 0
 		Array.from(document.getElementsByClassName('g')).forEach((el) => {
 			var url = el.getElementsByTagName('a')[0].href
 			url = new URL(url)
-			if (blockedwebsites.includes(url.hostname)) {
+			if (websites2block.includes(url.hostname)) {
 				blockedN++
 				var html = el.innerHTML
 				el.setAttribute('data-blockedhtml', html)
@@ -46,7 +46,7 @@
 	})
 
 
-	removeBlockedWebsites()
+	removewebsites2block()
 
 
 	// Найближчий батьківський елемент

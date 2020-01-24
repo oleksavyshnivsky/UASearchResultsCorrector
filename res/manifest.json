@@ -3,7 +3,7 @@
 	"name": "UA Search Results Corrector",
 	"description": "Виправлення неправильної локалізації результатів пошуку",
 	"version": "0.1",
-	"permissions": ["declarativeContent", "storage"],
+	"permissions": ["activeTab", "declarativeContent", "storage"],
 	"page_action": {
 		"default_popup": "popup.html",
 		"icons": {
@@ -12,6 +12,7 @@
 			"128": "icon128.png"
 		}
     },
+    "options_page": "options.html",
 	"background": {
 		"scripts": ["background.js"],
 		"persistent": false
