@@ -7,9 +7,9 @@
 	"page_action": {
 		"default_popup": "popup.html",
 		"icons": {
-			"16": "icon16.png",
-			"48": "icon48.png",
-			"128": "icon128.png"
+			"16": "assets/icon16.png",
+			"48": "assets/icon48.png",
+			"128": "assets/icon128.png"
 		}
     },
     "options_page": "options.html",
@@ -23,12 +23,13 @@
 				"https://*.google.com/*",
 				"https://google.com/*"
 			],
-			"js": ["content.js"]
+			"js": ["content.js"],
+			"css": ["styles.css?v=1"]
 		}
 	],
 	"icons": {
-		"16": "icon16.png",
-		"48": "icon48.png",
-		"128": "icon128.png"
+		"16": "assets/icon16.png",
+		"48": "assets/icon48.png",
+		"128": "assets/icon128.png"
 	}
 }
