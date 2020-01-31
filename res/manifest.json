@@ -24,7 +24,7 @@
 				"https://google.com/*"
 			],
 			"js": ["content.js"],
-			"css": ["styles.css?v=1"]
+			"css": ["styles.css"]
 		}
 	],
 	"icons": {

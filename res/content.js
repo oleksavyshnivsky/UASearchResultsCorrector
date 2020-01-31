@@ -1,7 +1,14 @@
 (function() {
 	'use strict';
 	// Користувацькі дані
-	let websites2block = ['ubuntu.fliplinux.com', 'www.php.su']
+	// let websites2block = ['ubuntu.fliplinux.com', 'www.php.su']
+	let websites2block = []
+
+	chrome.storage.sync.get('websites2block', function(data) {
+		websites2block = data.websites2block
+	})
+
+	
 	function getFromLS() {
 		websites2block = JSON.parse(localStorage.getItem('src-websites-blocked'))
 	}
@@ -29,7 +36,7 @@
 				blockedN++
 				var html = el.innerHTML
 				el.setAttribute('data-blockedhtml', html)
-				el.innerHTML = '<span style="color: red;">[Усунено результат з ' + url.hostname + '] '
+				el.innerHTML = '<span class="ode-blocked" -style="color: red;">[Усунено результат з ' + url.hostname + '] '
 			}
 		})
 	}
@@ -42,7 +49,7 @@
 	})
 	// Зміна описів
 	Array.from(document.getElementsByClassName('s')).forEach((el) => {
-		if (isthistextru(el.innerText)) el.innerHTML = '<span style="color: red;">[усунено]</span>'
+		if (isthistextru(el.innerText)) el.innerHTML = '<span class="ode-blocked" -style="color: red;">[усунено]</span>'
 	})
 
 
