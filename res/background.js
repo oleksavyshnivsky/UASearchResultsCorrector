@@ -5,7 +5,8 @@ chrome.runtime.onInstalled.addListener(function() {
 		console.log("The color is green.")
 	})
 
-  chrome.storage.sync.set({websites2block: ['ubuntu.fliplinux.com', 'www.php.su']}, function() {
+  // chrome.storage.sync.set({websites2block: ['ubuntu.fliplinux.com', 'www.php.su']}, function() {
+  chrome.storage.sync.set({websites2block: []}, function() {
     console.log("The websites are written.")
   })
 

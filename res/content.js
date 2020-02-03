@@ -6,6 +6,7 @@
 
 	chrome.storage.sync.get('websites2block', function(data) {
 		websites2block = data.websites2block
+		console.log(websites2block)
 	})
 
 	
