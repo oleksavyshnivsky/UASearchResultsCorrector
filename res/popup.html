@@ -2,35 +2,48 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="popup.css">
+
 		<style>
-			button {
-				height: 30px;
-				width: 30px;
-				outline: none;
-			}
-			[data-delete] {
-				color: red;
-			}
-			#websites2block-table tr:nth-child(odd) {
-				background-color: #dedede;
+			body {
+				width: 400px;
+				height: 400px;
+				text-align: center;
 			}
 		</style>
 	</head>
 	<body>
+		<h1>Виправлення результатів пошуку</h1>
+	
 		<!-- Додати новий сайт у список заблокованих -->
-		<form method="post" id="form-newwebsite2block">
-			<label for="newwebsite2block"></label>
-			<input type="text" id="newwebsite2block" value="" placeholder="(без схеми)">
-			<input type="submit" value="Додати">
-		</div>
+		<div class="msgbox"></div>
+		<form method="post" id="form-newblockedwebsite">
+			<label for="newblockedwebsite" class="col-form-label">Додати сайт у список заблокованих</label>
+			<input type="text" id="newblockedwebsite" value="" placeholder="URL" class="form-control" required="">
+			<input type="submit" value="Додати" class="btn ">
+		</form>
 
-		<!-- Список заблокованих сайтів -->
-		<div id="websites2block-wrapper" style="overflow: auto; max-height: 60vh;">
-			
-		</div>
+		<!-- Додати правило виправлення посилань -->
+		<div class="msgbox"></div>
+		<form method="post" id="form-newrule">
+			<label for="newruleB" class="col-form-label">Додати правило виправлення посилання</label>
+			<input type="text" id="newruleB" value="" placeholder="Є" class="form-control" required="">
+			<input type="text" id="newruleA" value="" placeholder="Має бути" class="form-control" required="">
+			<input type="submit" value="Додати" class="btn ">
+		</form>
 
+		<p>
+			Список сайтів і правил — на <a href="/options.html" target="_blank">сторінці налаштувань</a>
+		</p>
 
-		<button id="changeColor"></button>
-		<script src="popup.js"></script>
+		<p>
+			<a href="https://github.com/oleksavyshnivsky/UASearchResultsCorrector" target="_blank">Github</a>
+		</p>
+
+		<p>
+			<a href="mailto:dying.escape+UASearchResultsCorrector@gmail.com" target="_blank">Написати автору</a>
+		</p>
+
+		<script src="popup.js" charset="utf-8"></script>
 	</body>
 </html>

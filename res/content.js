@@ -1,23 +1,20 @@
 (function() {
 	'use strict';
 	// Користувацькі дані
-	// let websites2block = ['ubuntu.fliplinux.com', 'www.php.su']
-	let websites2block = []
+	// let blockedwebsites = []
+	// let linkrules = []
+	// chrome.storage.sync.get('blockedwebsites', function(data) {
+	// 	blockedwebsites = data.blockedwebsites
+	// })
+	// chrome.storage.sync.get('linkrules', function(data) {
+	// 	linkrules = data.linkrules
+	// })
+	var replacements = 0
 
-	chrome.storage.sync.get('websites2block', function(data) {
-		websites2block = data.websites2block
-		console.log(websites2block)
-	})
-
-	
-	function getFromLS() {
-		websites2block = JSON.parse(localStorage.getItem('src-websites-blocked'))
-	}
-	function setInLS() {
-		localStorage.setItem('src-websites-blocked')
-	}
+	// ————————————————————————————————————————————————————————————————————————————————
+	// ————————————————————————————————————————————————————————————————————————————————
 	// Language detector
-	function isthistextru(text) {
+	function isThisTextRu(text) {
 		return (
 			text.includes('ы')
 			|| text.includes('Ы')
@@ -27,35 +24,123 @@
 			|| text.includes('Ъ')
 		)
 	}
-	// Видалення непотрібних результатів
-	function removewebsites2block() {
-		var blockedN = 0
-		Array.from(document.getElementsByClassName('g')).forEach((el) => {
-			var url = el.getElementsByTagName('a')[0].href
-			url = new URL(url)
-			if (websites2block.includes(url.hostname)) {
-				blockedN++
+
+	// ————————————————————————————————————————————————————————————————————————————————
+	// ВИПРАВЛЕННЯ КОНТЕНТУ
+	// ————————————————————————————————————————————————————————————————————————————————
+
+	// Виправлення посилань
+	function correctLinks() {
+		chrome.storage.sync.get('linkrules', function(data) {
+			var linkrules = data.linkrules ? data.linkrules : []
+			var regexes = []
+			linkrules.forEach((rule) => {regexes.push(new RegExp(rule[0], 'gi'))})
+			Array.from(document.getElementsByClassName('g')).forEach((el) => {
+				// el.innerHTML = el.innerHTML.replace(/\/ru\//gi, '/en/')
+				regexes.some((regex, i) => {
+					if (regex.test(el.innerHTML)) {
+						el.innerHTML = el.innerHTML.replace(regex, linkrules[i][1])
+						replacements++
+						return true
+					}
+				})
+			})
+		})
+	}
+
+	// ————————————————————————————————————————————————————————————————————————————————
+	// Усунення заголовків
+	function hideRuTitles() {
+		Array.from(document.getElementsByTagName('h3')).forEach((el) => {
+			if (isThisTextRu(el.innerText)) {
 				var html = el.innerHTML
 				el.setAttribute('data-blockedhtml', html)
-				el.innerHTML = '<span class="ode-blocked" -style="color: red;">[Усунено результат з ' + url.hostname + '] '
+				el.innerHTML = el.closest('a').href
+
+				replacements++
 			}
 		})
 	}
 
+	// Усунення описів
+	function hideRuDescriptions() {
+		Array.from(document.getElementsByClassName('s')).forEach((el) => {
+			if (isThisTextRu(el.innerText)) {
+				var html = el.innerHTML
+				el.setAttribute('data-blockedhtml', html)
+				el.innerHTML = '<span class="ode-blocked">[Усунено]</span>'
+
+				replacements++
+			}
+		})
+	}
+
+	// ————————————————————————————————————————————————————————————————————————————————
+	// Усунення результатів із заблокованих сайтів
+
+	// Варіант 1. Чітка відповідність
+	function _hideBlockedWebsites() {
+		chrome.storage.sync.get('blockedwebsites', function(data) {
+			var blockedwebsites = data.blockedwebsites ? data.blockedwebsites : []
+			var blockedN = 0
+			Array.from(document.getElementsByClassName('g')).forEach((el) => {
+				var url = el.getElementsByTagName('a')[0].href
+				url = new URL(url)
+				if (blockedwebsites.includes(url.hostname)) {
+					blockedN++
+					var html = el.innerHTML
+					el.setAttribute('data-blockedhtml', html)
+					el.innerHTML = '<span class="ode-blocked">[Усунено результат з ' + url.hostname + ']</span>'
+					replacements++
+				}
+			})
+		})
+	}
+
+	// Варіант 2. Регулярні вирази
+	function hideBlockedWebsites() {
+		chrome.storage.sync.get('blockedwebsites', function(data) {
+			var blockedwebsites = data.blockedwebsites ? data.blockedwebsites : []
+			var regexes = []
+			blockedwebsites.forEach((el) => {regexes.push(new RegExp(el, 'gi'))})
+
+			var blockedN = 0
+			Array.from(document.getElementsByClassName('g')).forEach((el) => {
+				var url = el.getElementsByTagName('a')[0].href
+				url = new URL(url)
+
+				for (var i = 0; i < regexes.length; i++) {
+					if (regexes[i].test(url.hostname)) {
+						blockedN++
+						var html = el.innerHTML
+						el.setAttribute('data-blockedhtml', html)
+						el.innerHTML = '<span class="ode-blocked">[Усунено результат з ' + url.hostname + ']</span>'
+						replacements++
+						break
+					}
+				}
+			})
+		})
+	}
 
 
-	// Заміна посилань
-	Array.from(document.getElementsByClassName('g')).forEach((el) => {
-		el.innerHTML = el.innerHTML.replace(/\/ru\//gi, '/en/')
-	})
-	// Зміна описів
-	Array.from(document.getElementsByClassName('s')).forEach((el) => {
-		if (isthistextru(el.innerText)) el.innerHTML = '<span class="ode-blocked" -style="color: red;">[усунено]</span>'
-	})
+	// ————————————————————————————————————————————————————————————————————————————————
+	// ПОЧАТКОВА ПОСЛІДОВНІСТЬ ДІЙ
+	// ————————————————————————————————————————————————————————————————————————————————
+
+	// Виправлення посилань
+	correctLinks()
+	// Усунення заголовків
+	// hideRuTitles()
+	// Усунення описів
+	hideRuDescriptions()
+	// Приховування результатів із заблокованих сайтів
+	hideBlockedWebsites()
 
 
-	removewebsites2block()
-
+	// ————————————————————————————————————————————————————————————————————————————————
+	// ДОПОМІЖНІ ФУНКЦІЇ
+	// ————————————————————————————————————————————————————————————————————————————————
 
 	// Найближчий батьківський елемент
 	function closest (el, predicate) {
