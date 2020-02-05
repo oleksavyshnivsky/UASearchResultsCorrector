@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" type="text/css" href="popup.css">
+		<link rel="stylesheet" type="text/css" href="common.css">
 
 		<style>
 			body {
@@ -52,11 +52,36 @@
 				overflow: auto;
 				margin-bottom: 1rem;
 			}
+			.loading {
+				font-style: italic;
+				animation-name: loading;
+				animation-duration: 4s;
+				animation-iteration-count: infinite;
+			}
+
+			@keyframes loading {
+				0%  {color: red;}
+				25% {color: yellow;}
+				50% {color: blue;}
+				75%	{color: green;}
+				1000%  {color: red;}
+			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
-			<h1>Заблоковані сайти</h1>
+			<h1>Виправлення результатів пошуку</h1>
+
+			<div class="text-center">
+				<hr>
+				<label class="switch">
+					<input type="checkbox" id="status-switch" >
+					<span class="slider round"></span>
+				</label>
+				<hr>
+			</div>
+
+			<h2>Заблоковані сайти</h2>
 			<!-- Додати новий сайт у список заблокованих -->
 			<div class="msgbox"></div>
 			<form method="post" id="form-newblockedwebsite">
@@ -67,9 +92,11 @@
 				</div>
 			</form>
 
-			<div id="blockedwebsites-wrapper" class="list-wrapper"></div>
+			<div id="blockedwebsites-wrapper" class="list-wrapper">
+				<span class="loading">Завантажується</span>
+			</div>
 
-			<h1>Правила виправлення посилань</h1>
+			<h2>Правила виправлення посилань</h2>
 			<!-- Додати новий сайт у список заблокованих -->
 			<div class="msgbox"></div>
 			<form method="post" id="form-newrule">
@@ -81,7 +108,9 @@
 				</div>
 			</form>
 
-			<div id="linkrules-wrapper" class="list-wrapper"></div>
+			<div id="linkrules-wrapper" class="list-wrapper">
+				<span class="loading">Завантажується</span>
+			</div>
 
 			<div class="text-center" style="margin-top: 3rem;">
 				<p>
@@ -94,7 +123,7 @@
 			</div>
 		</div>
 
-
-		<script src="options.js" charset="UTF-8"></script>
+		<script src="common.js" charset="utf-8"></script>
+		<script src="options.js" charset="utf-8"></script>
 	</body>
 </html>
