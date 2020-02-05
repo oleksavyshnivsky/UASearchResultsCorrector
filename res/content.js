@@ -14,15 +14,23 @@
 	// ————————————————————————————————————————————————————————————————————————————————
 	// ————————————————————————————————————————————————————————————————————————————————
 	// Language detector
+	// https://en.wikipedia.org/wiki/Wikipedia:Language_recognition_chart
+	// http://www.pravapis.org/art_letter_frequency.asp
+	// https://www.sttmedia.com/characterfrequency-russian
 	function isThisTextRu(text) {
-		return (
-			text.includes('ы')
-			|| text.includes('Ы')
-			|| text.includes('э')
-			|| text.includes('Э')
-			|| text.includes('ъ')
-			|| text.includes('Ъ')
-		)
+		var L = text.length
+		var a = (text.match(/а|А/g)||[]).length
+		var r = (text.match(/ы|Ы|э|Э|ъ|Ъ|ё|Ё/g)||[]).length
+		return (r/L > 0.01 && a/L < 0.1)
+
+		// return (
+		// 	text.includes('ы')
+		// 	|| text.includes('Ы')
+		// 	|| text.includes('э')
+		// 	|| text.includes('Э')
+		// 	|| text.includes('ъ')
+		// 	|| text.includes('Ъ')
+		// )
 	}
 
 	// ————————————————————————————————————————————————————————————————————————————————
