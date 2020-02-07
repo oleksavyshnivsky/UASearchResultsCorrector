@@ -110,7 +110,7 @@
 		chrome.storage.sync.get('blockedwebsites', function(data) {
 			var blockedwebsites = data.blockedwebsites ? data.blockedwebsites : []
 			var regexes = []
-			blockedwebsites.forEach((el) => {regexes.push(new RegExp(el, 'gi'))})
+			blockedwebsites.forEach((el) => {regexes.push(new RegExp(el, 'i'))})	// НЕ ВЖИВАТИ g — https://github.com/nodejs/node/issues/18648#issuecomment-364194292
 
 			var blockedN = 0
 			Array.from(document.getElementsByClassName('g')).forEach((el) => {
@@ -120,12 +120,11 @@
 				for (var i = 0; i < regexes.length; i++) {
 					if (regexes[i].test(url.hostname)) {
 						blockedN++
-						var html = el.innerHTML
-						el.setAttribute('data-blockedhtml', html)
+						el.setAttribute('data-blockedhtml', el.innerHTML)
 						el.innerHTML = '<span class="ode-blocked">[Усунено результат з ' + url.hostname + ']</span>'
 						replacements++
 						break
-					}
+					} 
 				}
 			})
 		})
@@ -137,14 +136,15 @@
 	// ————————————————————————————————————————————————————————————————————————————————
 	chrome.storage.local.get('status', function(data) {
 		if (!!data.status) {
+			// Приховування результатів із заблокованих сайтів
+			hideBlockedWebsites()
 			// Виправлення посилань
 			correctLinks()
 			// Усунення заголовків
 			// hideRuTitles()
 			// Усунення описів
 			hideRuDescriptions()
-			// Приховування результатів із заблокованих сайтів
-			hideBlockedWebsites()
+			
 		}
 	})
 
