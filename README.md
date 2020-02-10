@@ -20,7 +20,7 @@
 
 ## Контакт
 
-[Написати автору](mailto:dying.escape+UASearchResultsCorrector@gmail.com)
+[Написати автору](mailto:oleksa.vyshnivsky+uasrc@gmail.com)
 
 
 
