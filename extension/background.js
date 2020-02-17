@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(function() {
 		console.log('Статус активності виставлений')
 	})
 
-	chrome.storage.sync.set({blockedwebsites: ['\.ru$', '\.su$']}, function() {
+	chrome.storage.sync.set({blockedwebsites: ['\\.ru$', '\\.su$']}, function() {
 		console.log('Список заблокованих вебсайтів записаний.')
 	})
 
