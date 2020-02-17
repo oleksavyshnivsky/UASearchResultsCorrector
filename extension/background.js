@@ -18,6 +18,7 @@ chrome.runtime.onInstalled.addListener(function() {
 		console.log('Список правил виправлення посилань записаний.')
 	})
 
+	// Розширення працює на www.google.com
 	chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
 		chrome.declarativeContent.onPageChanged.addRules([{
 			conditions: [
